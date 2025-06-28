@@ -1,5 +1,5 @@
 # Health Check-in App
-This is a simple health check-in app.
+This is a simple health check-in app, [Loom video](https://www.loom.com/share/2fc9200e86eb46e093521fa720c2e727?sid=ae6fb5e2-484f-479f-b43c-9b5649b98652)
 
 ## Tech Stack:
 - React Native
@@ -42,3 +42,6 @@ This is a simple health check-in app.
 - Backend is running on `http://localhost:3000`
 - Frontend is running on `http://localhost:8081`
 
+
+## Loom video:
+- [Watch the Loom video](https://www.loom.com/share/2fc9200e86eb46e093521fa720c2e727?sid=ae6fb5e2-484f-479f-b43c-9b5649b98652)
