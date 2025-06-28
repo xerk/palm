@@ -1,7 +1,7 @@
 import { XStack, YStack, Card, H2, H4 } from 'tamagui'
 import { Button, Text, ScrollView, useTheme } from 'tamagui'
 import { useLocalSearchParams, router } from 'expo-router'
-import { CheckCircle, ArrowLeft, RotateCcw } from '@tamagui/lucide-icons'
+import { CheckCircle, RotateCcw } from '@tamagui/lucide-icons'
 import { useNavigation } from 'expo-router'
 import { useLayoutEffect } from 'react'
 
