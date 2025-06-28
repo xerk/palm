@@ -1,55 +1,83 @@
-import { ExternalLink } from '@tamagui/lucide-icons'
-import { Anchor, H2, Paragraph, XStack, YStack } from 'tamagui'
-import { ToastControl } from 'app/CurrentToast'
+import {YStack, Form, ScrollView} from "tamagui"
+import {useState} from "react"
+import {router} from "expo-router"
+import type {Mood, FormValues} from "../../types/index"
+import {api} from "../../api/api"
+import {CheckInHeader} from "components/form/CheckInHeader"
+import {ErrorDisplay} from "components/form/ErrorDisplay"
+import {MoodSelection} from "components/form/MoodSelection"
+import {EnergyLevel} from "components/form/EnergyLevel"
+import {NotesSection} from "components/form/NotesSection"
+import {SubmitButton} from "components/form/SubmitButton"
 
 export default function TabOneScreen() {
+  const [status, setStatus] = useState<"off" | "submitting" | "submitted">(
+    "off"
+  )
+  const [mood, setMood] = useState<Mood | null>(null)
+  const [energy, setEnergy] = useState<number>(5)
+  const [note, setNote] = useState<string>("")
+  const [errors, setErrors] = useState<string[]>([])
+
+  const handleSubmit = async () => {
+    setStatus("submitting")
+    setErrors([])
+    try {
+      const response = await api.checkin({mood, energy, note} as FormValues)
+
+      router.push({
+        pathname: "/results" as any,
+        params: {
+          message: response.data.message,
+          recommendations: JSON.stringify(response.data.data),
+        },
+      })
+
+      handleReset()
+    } catch (error: any) {
+      setErrors(error.response.data.message)
+      console.error("Check-in error:", error)
+      setStatus("off")
+    }
+  }
+
+  const handleReset = () => {
+    setStatus("off")
+    setMood(null)
+    setEnergy(5)
+    setNote("")
+    setErrors([])
+  }
+
   return (
-    <YStack flex={1} items="center" gap="$8" px="$10" pt="$5" bg="$background">
-      <H2>Tamagui + Expo</H2>
+    <YStack flex={1} bg='$background' px='$4' py='$6'>
+      <ScrollView>
+        <YStack gap='$6' width='100%'>
+          <CheckInHeader />
 
-      <ToastControl />
+          <ErrorDisplay errors={errors} />
 
-      <XStack
-        items="center"
-        justify="center"
-        flexWrap="wrap"
-        gap="$1.5"
-        position="absolute"
-        b="$8"
-      >
-        <Paragraph fontSize="$5">Add</Paragraph>
+          <Form onSubmit={() => handleSubmit()}>
+            <YStack gap='$5'>
+              <MoodSelection
+                mood={mood}
+                onMoodChange={setMood}
+                onErrorClear={() => setErrors([])}
+              />
 
-        <Paragraph fontSize="$5" px="$2" py="$1" color="$blue10" bg="$blue5">
-          tamagui.config.ts
-        </Paragraph>
+              <EnergyLevel energy={energy} onEnergyChange={setEnergy} />
 
-        <Paragraph fontSize="$5">to root and follow the</Paragraph>
+              <NotesSection note={note} onNoteChange={setNote} />
 
-        <XStack
-          items="center"
-          gap="$1.5"
-          px="$2"
-          py="$1"
-          rounded="$3"
-          bg="$green5"
-          hoverStyle={{ bg: '$green6' }}
-          pressStyle={{ bg: '$green4' }}
-        >
-          <Anchor
-            href="https://tamagui.dev/docs/core/configuration"
-            textDecorationLine="none"
-            color="$green10"
-            fontSize="$5"
-          >
-            Configuration guide
-          </Anchor>
-          <ExternalLink size="$1" color="$green10" />
-        </XStack>
-
-        <Paragraph fontSize="$5" text="center">
-          to configure your themes and tokens.
-        </Paragraph>
-      </XStack>
+              <SubmitButton
+                status={status}
+                mood={mood}
+                onSubmit={handleSubmit}
+              />
+            </YStack>
+          </Form>
+        </YStack>
+      </ScrollView>
     </YStack>
   )
 }

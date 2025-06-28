@@ -19,9 +19,11 @@
   },
   "dependencies": {
     "@react-navigation/native": "^6.1.17",
+    "@tamagui/colors": "^1.129.4",
     "@tamagui/config": "^1.129.4",
     "@tamagui/lucide-icons": "^1.129.4",
     "@tamagui/toast": "^1.129.4",
+    "axios": "^1.10.0",
     "babel-preset-expo": "~13.0.0",
     "burnt": "^0.12.2",
     "expo": "53.0.7",
